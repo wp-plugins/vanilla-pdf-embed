@@ -3,7 +3,7 @@
  * Plugin Name: Vanilla PDF Embed
  * Plugin URI: http://wordpress.org/plugins/vanilla-pdf-embed/
  * Description: Simple PDF embeds using &lt;object&gt;
- * Version: 0.0.1
+ * Version: 0.0.2
  * Author: Mike Doherty <mike@mikedoherty.ca>
  * Author URI: http://hashbang.ca
  * License: GPL2+
@@ -28,17 +28,22 @@ function vpdfe_get_attachment_id_by_url( $url ) {
     $parse_url  = explode( parse_url( WP_CONTENT_URL, PHP_URL_PATH ), $url );
 
     // Return nothing if there aren't any $url parts
-    if ( ! isset( $parse_url[1] ) || empty( $parse_url[1] ) )
+    if ( ! isset( $parse_url[1] ) || empty( $parse_url[1] ) ) {
         return;
+    }
 
     // Now we're going to quickly search the DB for any attachment GUID with a partial path match.
     // Example: /uploads/2013/05/test-image.jpg
     global $wpdb;
 
     $prefix     = $wpdb->prefix;
-    $attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM " . $prefix . "posts WHERE guid RLIKE %s;", $parse_url[1] ) );
-    if (! is_array($attachment))
+    $attachment = $wpdb->get_col( $wpdb->prepare(
+        "SELECT ID FROM " . $prefix . "posts WHERE guid RLIKE %s;",
+        $parse_url[1]
+    ) );
+    if (! is_array($attachment)) {
         return;
+    }
 
     return $attachment[0];
 }
@@ -56,8 +61,9 @@ function vpdfe_extract_id_from_wp_url ( $url ) {
     // Can't handle pretty URLs for attachments (only the ?attachment_id=n)
     // so after this, fallback to fjarrett's code
     $id = url_to_postid( $url );
-    if ($id != 0)
+    if ($id != 0) {
         return $id;
+    }
 
     return vpdfe_get_attachment_id_by_url( $url );
 }
@@ -88,21 +94,24 @@ function vpdfe_pdf_embed_html_from_shortcode( $params , $content = null ) {
         ), $params )
     );
 
-    return vpdfe_pdf_embed_html($src ? $src : $content, $title, $width, $height);
+    $embed_html = vpdfe_pdf_embed_html($src ? $src : $content, $title, $width, $height);
+    return $embed_html ? $embed_html : $content;
 }
 
 function vpdfe_pdf_embed_html($src, $title='', $w=600, $h=776) {
     // if $content is a URL pointing to an attachment page on this Wordpress
     // site then get the PDF's actual URL
     if ( $id = vpdfe_extract_id_from_wp_url($src) ) {
-        $wp_post = get_post($id);
-        if ($wp_post->post_type != 'attachment')
+        $wp_post = get_post( $id );
+        if ( $wp_post->post_type != 'attachment' || $wp_post->post_mime_type != 'application/pdf') {
             return;
+        }
 
-        $src = wp_get_attachment_url( $id );
+        $src = wp_get_attachment_url( $wp_post->ID );
 
-        if (!isset($title))
+        if (!isset($title)) {
             $title = $wp_post->post_title;
+        }
     }
 
     $template = '<object class="vanilla-pdf-embed" data="%1$s" type="application/pdf" width="%3$s" height="%4$s">
@@ -122,6 +131,7 @@ add_shortcode( 'pdf', 'vpdfe_pdf_embed_html_from_shortcode' );
  * Adds a fake oEmbed provider for this Wordpress site
  */
 function vpdfe_pdf_embed_html_from_autoembed ($matches, $attr, $url, $rawattr) {
-    return vpdfe_pdf_embed_html($url);
+    $embed_html = vpdfe_pdf_embed_html($url);
+    return $embed_html ? $embed_html : $url;
 }
 wp_embed_register_handler('vanilla-pdf', '#^'.home_url().'#i', 'vpdfe_pdf_embed_html_from_autoembed');

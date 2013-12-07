@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Embeds PDFs in your pages and posts, without using JS.
 
 == Description ==
-To embed a PDF you uploaded it to your Wordpress site's media
+To embed a PDF you've uploaded to your Wordpress site's media
 library, simply put the URL for the attachment page in your
 post on its own line. The PDF will be embedded with the
 default settings at that location, as if it were using oEmbed.
@@ -28,6 +28,9 @@ URL, or the URL to the PDF file directly.
 2. Activate the plugin through the "Plugins" menu in the WordPress admin panel
 
 == Changelog ==
+
+= 0.0.2 =
+  - Don't embed non-PDFs from the media library
 
 = 0.0.1 =
   - Initial release
