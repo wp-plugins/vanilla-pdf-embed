@@ -37,8 +37,9 @@ function fjarrett_get_attachment_id_by_url( $url ) {
 
     $prefix     = $wpdb->prefix;
     $attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM " . $prefix . "posts WHERE guid RLIKE %s;", $parse_url[1] ) );
+    if (! is_array($attachment))
+        return;
 
-    // Returns null if no attachment is found.
     return $attachment[0];
 }
 
@@ -55,7 +56,7 @@ function extract_url_id ( $url ) {
     // Can't handle pretty URLs for attachments (only the ?attachment_id=n)
     // so after this, fallback to fjarrett's code
     $id = url_to_postid( $url );
-    if ( $id != 0 )
+    if ($id != 0)
         return $id;
 
     return fjarrett_get_attachment_id_by_url( $url );
