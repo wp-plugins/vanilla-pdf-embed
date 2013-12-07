@@ -23,7 +23,7 @@
  * @return {int} $attachment
  *
  */
-function fjarrett_get_attachment_id_by_url( $url ) {
+function vpdfe_get_attachment_id_by_url( $url ) {
     // Split the $url into two parts with the wp-content directory as the separator.
     $parse_url  = explode( parse_url( WP_CONTENT_URL, PHP_URL_PATH ), $url );
 
@@ -47,7 +47,7 @@ function fjarrett_get_attachment_id_by_url( $url ) {
 /**
  * Returns the ID for an attachment/media upload.
  */
-function extract_url_id ( $url ) {
+function vpdfe_extract_id_from_wp_url ( $url ) {
     // The URL must be on this Wordpress site
     if ( parse_url($url, PHP_URL_HOST) != parse_url( home_url(), PHP_URL_HOST ) )
         return;
@@ -59,7 +59,7 @@ function extract_url_id ( $url ) {
     if ($id != 0)
         return $id;
 
-    return fjarrett_get_attachment_id_by_url( $url );
+    return vpdfe_get_attachment_id_by_url( $url );
 }
 
 /*
@@ -78,7 +78,7 @@ add_action( 'after_setup_theme', 'set_default_content_width' );
 /*
  * Returns HTML to embed a PDF using <object>, which requires no JS.
  */
-function vanilla_pdf_embed( $params , $content = null ) {
+function vpdfe_pdf_embed_html_from_shortcode( $params , $content = null ) {
     extract( shortcode_atts( // Creates variables in your namespace
         array(
             'width' => 600,
@@ -88,13 +88,13 @@ function vanilla_pdf_embed( $params , $content = null ) {
         ), $params )
     );
 
-    return pdf_embed_html($src ? $src : $content, $title, $width, $height);
+    return vpdfe_pdf_embed_html($src ? $src : $content, $title, $width, $height);
 }
 
-function pdf_embed_html($src, $title='', $w=600, $h=776) {
+function vpdfe_pdf_embed_html($src, $title='', $w=600, $h=776) {
     // if $content is a URL pointing to an attachment page on this Wordpress
     // site then get the PDF's actual URL
-    if ( $id = extract_url_id($src) ) {
+    if ( $id = vpdfe_extract_id_from_wp_url($src) ) {
         $wp_post = get_post($id);
         if ($wp_post->post_type != 'attachment')
             return;
@@ -116,12 +116,12 @@ function pdf_embed_html($src, $title='', $w=600, $h=776) {
         esc_attr($h)
     );
 }
-add_shortcode( 'pdf', 'vanilla_pdf_embed' );
+add_shortcode( 'pdf', 'vpdfe_pdf_embed_html_from_shortcode' );
 
 /*
  * Adds a fake oEmbed provider for this Wordpress site
  */
-function auto_pdf_embed_html ($matches, $attr, $url, $rawattr) {
-    return pdf_embed_html($url);
+function vpdfe_pdf_embed_html_from_autoembed ($matches, $attr, $url, $rawattr) {
+    return vpdfe_pdf_embed_html($url);
 }
-wp_embed_register_handler('vanilla-pdf', '#^'.home_url().'#i', 'auto_pdf_embed_html');
+wp_embed_register_handler('vanilla-pdf', '#^'.home_url().'#i', 'vpdfe_pdf_embed_html_from_autoembed');
