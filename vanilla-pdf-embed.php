@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Vanilla PDF Embed
- * Plugin URI: http://nowhere.yet
+ * Plugin URI: http://wordpress.org/plugins/vanilla-pdf-embed/
  * Description: Simple PDF embeds using &lt;object&gt;
  * Version: 0.0.1
  * Author: Mike Doherty <mike@mikedoherty.ca>
