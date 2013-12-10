@@ -114,13 +114,14 @@ function vpdfe_pdf_embed_html($src, $title='', $w=600, $h=776) {
         }
     }
 
-    $template = '<object class="vanilla-pdf-embed" data="%1$s" type="application/pdf" width="%3$s" height="%4$s">
-    <p><a href="%1$s">Download the PDF file %2$s.</a></p>
+    // FitH will fit the page width in the embed window
+    $template = '<object class="vanilla-pdf-embed" data="%1$s#page=1&view=FitH" type="application/pdf" width="%3$s" height="%4$s">
+    <p><a href="%1$s">Download the PDF file%2$s.</a></p>
 </object>';
 
     return sprintf( $template,
-        esc_url($src.'#page=1&view=FitH'), // FitH will fit the page width in the embed window
-        esc_attr($title),
+        esc_url($src),
+        esc_attr(" $title"),
         esc_attr($w),
         esc_attr($h)
     );

@@ -29,6 +29,10 @@ URL, or the URL to the PDF file directly.
 
 == Changelog ==
 
+= 0.0.3 =
+  - Fix a spacing issue for PDFs with no title
+  - Don't use PDF open parameters for the fallback link
+
 = 0.0.2 =
   - Don't embed non-PDFs from the media library
 
