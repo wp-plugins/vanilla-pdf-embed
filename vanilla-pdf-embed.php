@@ -3,7 +3,7 @@
  * Plugin Name: Vanilla PDF Embed
  * Plugin URI: http://wordpress.org/plugins/vanilla-pdf-embed/
  * Description: Simple PDF embeds using &lt;object&gt;
- * Version: 0.0.2
+ * Version: 0.0.3
  * Author: Mike Doherty <mike@mikedoherty.ca>
  * Author URI: http://hashbang.ca
  * License: GPL2+
@@ -136,3 +136,11 @@ function vpdfe_pdf_embed_html_from_autoembed ($matches, $attr, $url, $rawattr) {
     return $embed_html ? $embed_html : $url;
 }
 wp_embed_register_handler('vanilla-pdf', '#^'.home_url().'#i', 'vpdfe_pdf_embed_html_from_autoembed');
+
+function vpdfe_pdf_attachment_link ($html, $id) {
+    $post = get_post( $id, ARRAY_A );
+    $embed_html = vpdfe_pdf_embed_html( $post['guid'] );
+
+    return $embed_html ? $embed_html : $html;
+}
+add_filter( 'wp_get_attachment_link', 'vpdfe_pdf_attachment_link', null, 2 );
