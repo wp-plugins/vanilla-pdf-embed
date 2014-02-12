@@ -29,6 +29,9 @@ URL, or the URL to the PDF file directly.
 
 == Changelog ==
 
+= 0.0.4 =
+  - By default, use a 100% width embed frame
+
 = 0.0.3 =
   - Embed PDFs on attachment pages
   - Fix a spacing issue for PDFs with no title
