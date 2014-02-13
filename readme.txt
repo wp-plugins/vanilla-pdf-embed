@@ -94,6 +94,9 @@ might embed the PDF, but won't allow it to scroll.
 
 == Changelog ==
 
+= 0.0.5 =
+  - Fix a simple programming error; thanks to firedog341 for the report
+
 = 0.0.4 =
   - By default, use a 100% width embed frame
   - Expanded readme
