@@ -94,6 +94,9 @@ might embed the PDF, but won't allow it to scroll.
 
 == Changelog ==
 
+= 0.0.6 =
+  - Set a default height of 500em
+
 = 0.0.5 =
   - Fix a simple programming error; thanks to firedog341 for the report
 
