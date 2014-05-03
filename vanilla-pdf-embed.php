@@ -9,6 +9,10 @@
  * License: GPL2+
  */
 
+ define ('VPDFE_ATTACHMENT', 0);
+ define ('VPDFE_AUTOEMBED', 1);
+ define ('VPDFE_SHORTCODE', 2);
+
 /**
  * Return an ID of an attachment by searching the database with the file URL.
  *
@@ -38,10 +42,10 @@ function vpdfe_get_attachment_id_by_url( $url ) {
 
     $prefix     = $wpdb->prefix;
     $attachment = $wpdb->get_col( $wpdb->prepare(
-        "SELECT ID FROM " . $prefix . "posts WHERE guid RLIKE %s;",
+        "SELECT ID FROM " . $prefix . "posts WHERE guid LIKE '%%%s';",
         $parse_url[1]
     ) );
-    if (! is_array($attachment)) {
+    if ( (! is_array($attachment) ) || (! isset($attachment[0]) ) ) {
         return;
     }
 
@@ -94,11 +98,11 @@ function vpdfe_pdf_embed_html_from_shortcode( $params , $content = null ) {
         ), $params )
     );
 
-    $embed_html = vpdfe_pdf_embed_html($src ? $src : $content, $title, $width, $height);
+    $embed_html = vpdfe_pdf_embed_html($src ? $src : $content, VPDFE_SHORTCODE, $title, $width, $height);
     return $embed_html ? $embed_html : $content;
 }
 
-function vpdfe_pdf_embed_html($src, $title='', $w='100%', $h='500em') {
+function vpdfe_pdf_embed_html($src, $route=VPDFE_SHORTCODE, $title='', $w='100%', $h='500em') {
     // if $content is a URL pointing to an attachment page on this Wordpress
     // site then get the PDF's actual URL
     if ( $id = vpdfe_extract_id_from_wp_url($src) ) {
@@ -113,6 +117,11 @@ function vpdfe_pdf_embed_html($src, $title='', $w='100%', $h='500em') {
             $title = $wp_post->post_title;
         }
     }
+    elseif ($route == VPDFE_AUTOEMBED && (0 == preg_match('#^' . quotemeta(home_url()) .'.*\.pdf$#i', $src)) ) {
+    // prevent autoembedding file with name like home_url() . 'boo.jpg' (but allow with shortcode)
+        return;
+    }
+
 
     // FitH will fit the page width in the embed window
     $template = '<object class="vanilla-pdf-embed" data="%1$s#page=1&view=FitH" type="application/pdf" %3$s %4$s>
@@ -132,14 +141,14 @@ add_shortcode( 'pdf', 'vpdfe_pdf_embed_html_from_shortcode' );
  * Adds a fake oEmbed provider for this Wordpress site
  */
 function vpdfe_pdf_embed_html_from_autoembed ($matches, $attr, $url, $rawattr) {
-    $embed_html = vpdfe_pdf_embed_html($url);
+    $embed_html = vpdfe_pdf_embed_html($url,VPDFE_AUTOEMBED);
     return $embed_html ? $embed_html : $url;
 }
 wp_embed_register_handler('vanilla-pdf', '#^'.home_url().'#i', 'vpdfe_pdf_embed_html_from_autoembed');
 
 function vpdfe_pdf_attachment_link ($html, $id) {
     $post = get_post( $id, ARRAY_A );
-    $embed_html = vpdfe_pdf_embed_html( $post['guid'] );
+    $embed_html = vpdfe_pdf_embed_html( $post['guid'], VPDFE_ATTACHMENT );
 
     return $embed_html ? $embed_html : $html;
 }

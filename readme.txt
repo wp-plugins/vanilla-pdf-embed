@@ -94,6 +94,9 @@ might embed the PDF, but won't allow it to scroll.
 
 == Changelog ==
 
+= 0.0.7 =
+  - Fix a couple corner cases - thanks AngelinaBelle!
+
 = 0.0.6 =
   - Set a default height of 500em
 
