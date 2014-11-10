@@ -70,23 +70,49 @@ The `[pdf]` shorttag accepts several optional parameters:
 The PDF should be embedded in the page, with the document scaled so it fills the
 embed frame horizontally. Unfortunately, embedding PDFs is not well-supported.
 
-#### PDF open parameters
+#### Auto-loading embedded PDFs
 
-The PDF should be scaled/zoomed within the embed frame so that the full
-horizontal width of the paper fills the frame. This is [not supported](https://code.google.com/p/chromium/issues/detail?id=64309) in
-Chrome's default PDF viewer, so the document will probably be scaled to 100%,
-which may either mean the document doesn't fill the frame, or, more likely,
-the document is too wide for the frame, and the right-hand side of the document
-is hidden.
+Unlike with images, web browsers may not automatically download and display
+embedded PDFs when the page is loaded. For security reasons, some users prefer
+not to allow the PDF plugin to run unless they trust the website the PDF comes
+from. This generally leaves a grey rectangle that the user may click on to allow
+the PDF to be downloaded and displayed.
+
+#### PDF open parameters
 
 There is currently no way to customize the [PDF open parameters](http://partners.adobe.com/public/developer/en/acrobat/PDFOpenParameters.pdf).
 
+#### Chrome
+
+The PDF should be scaled/zoomed within the embed frame so that the full
+horizontal width of the paper fills the frame. This is [not
+supported](https://code.google.com/p/chromium/issues/detail?id=64309) in
+Chrome's default PDF viewer, so the document will probably be scaled to 100%,
+which may either mean the document doesn't fill the frame, or, more likely, the
+document is too wide for the frame, and the right-hand side of the document is
+hidden.
+
+#### Internet Explorer
+
+Internet Explorer requires a PDF plugin to render embedded PDFs. Generally,
+that's Adobe Reader. Without such a plugin, the fallback download link will be
+used.
+
 #### Mobile browsers
 
-In particular, mobile browsers may show a grey box instead of the
-embedded PDF, and will download the file when it is clicked. Other mobile browsers
-might embed the PDF, but won't allow it to scroll.
+In particular, mobile browsers may show a grey box instead of the embedded PDF,
+and will download the file when it is clicked. Other mobile browsers might embed
+the PDF, but won't allow it to scroll.
 
+### Alternatives
+
+Your best alternative is to **not** embed PDFs. PDFs are bad for many reasons:
+not easily indexed by search engines, not easily accessible by readers who use
+assistive technologies, poorly supported by web browsers (as seen above) and so
+on. They're just **bad** and you should avoid embedding PDFs if you can.
+
+If you *really* can't, then you might consider using another solution like
+<http://pdfobject.com/> or [PDF.js](https://mozillalabs.com/en-US/pdfjs/).
 
 == Installation ==
 1. Upload `vanilla-pdf-embed.php` to the `/wp-content/plugins/` directory
