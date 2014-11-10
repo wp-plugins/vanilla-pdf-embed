@@ -3,7 +3,7 @@ Contributors: _doherty
 Tags: pdf, embed
 Donate link: https://flattr.com/profile/doherty
 Requires at least: 3.0.1
-Tested up to: 3.9.0
+Tested up to: 4.0.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,14 +12,14 @@ Embeds PDFs in your pages and posts, without using JS.
 
 == Description ==
 
-## Basic use
+### Basic use
 
 To embed a PDF you've uploaded to your Wordpress site's media
 library, simply put the URL for the attachment page in your
 post on its own line. The PDF will be embedded with the
 default settings at that location, as if it were using oEmbed.
 
-### Examples:
+#### Examples:
 
     Post short URL:
 
@@ -40,7 +40,7 @@ default settings at that location, as if it were using oEmbed.
 This doesn't work for PDFs hosted on other websites, or if you
 need to change the parameters.
 
-## Using the `[pdf]` shorttag
+### Using the `[pdf]` shorttag
 
 If the PDF isn't in your Wordpress site's media library, or if
 you want to customize any parameters for the embed, then use
@@ -58,19 +58,19 @@ The `[pdf]` shorttag accepts several optional parameters:
   - `title` - sets the title of the PDF, for use in the fallback
     link text.
 
-### Examples:
+#### Examples:
 
     Post short URL: [pdf width="200px"]http://localhost/?p=9[/pdf]
     Attachment default URL: [pdf height="500em"]http://localhost/?attachment_id=9[/pdf]
     Attachment pretty URL: [pdf title="Report 1"]http://localhost/test/report1/[/pdf]
     Media direct URL: [pdf]http://localhost/wp-content/uploads/2013/11/report1.pdf[/pdf]
 
-## Compatibility
+### Compatibility
 
 The PDF should be embedded in the page, with the document scaled so it fills the
 embed frame horizontally. Unfortunately, embedding PDFs is not well-supported.
 
-### PDF open parameters
+#### PDF open parameters
 
 The PDF should be scaled/zoomed within the embed frame so that the full
 horizontal width of the paper fills the frame. This is [not supported](https://code.google.com/p/chromium/issues/detail?id=64309) in
@@ -81,7 +81,7 @@ is hidden.
 
 There is currently no way to customize the [PDF open parameters](http://partners.adobe.com/public/developer/en/acrobat/PDFOpenParameters.pdf).
 
-### Mobile browsers
+#### Mobile browsers
 
 In particular, mobile browsers may show a grey box instead of the
 embedded PDF, and will download the file when it is clicked. Other mobile browsers
