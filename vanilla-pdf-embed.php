@@ -128,11 +128,11 @@ function vpdfe_pdf_embed_html($src, $route=VPDFE_SHORTCODE, $title='', $w='100%'
     <p><a href="%1$s">Download the PDF file%2$s.</a></p>
 </object>';
 
-    return sprintf( $template,
+    return sprintf($template,
         esc_url($src),
         esc_attr(" $title"),
-        ($w ? 'width="' . esc_attr($w) . '"' : ''),
-        ($h? 'height="' . esc_attr($h) . '"' : '')
+        ($w ? 'width="'  . esc_attr($w) . '"' : ''),
+        ($h ? 'height="' . esc_attr($h) . '"' : '')
     );
 }
 add_shortcode( 'pdf', 'vpdfe_pdf_embed_html_from_shortcode' );
